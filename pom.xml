@@ -12,9 +12,9 @@
     </parent>
 
     <groupId>ovh.angrysoft</groupId>
-    <artifactId>homed-backend</artifactId>
+    <artifactId>homed-web-backend</artifactId>
     <version>0.1.0</version>
-    <name>homed-backend</name>
+    <name>homed-web-backend</name>
     <description>Homedaemon web backend</description>
 
     <properties>
