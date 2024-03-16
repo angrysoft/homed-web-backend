@@ -1,5 +1,5 @@
 [Unit]
-Description=FixtureDb docker srvice
+Description=Homedaemon backend docker service
 After=docker.service
 Requires=docker.service
 
@@ -8,11 +8,11 @@ TimeoutStartSec=0
 Restart=always
 ExecStartPre=-/usr/bin/docker exec %n stop
 ExecStartPre=-/usr/bin/docker rm %n
-ExecStartPre=/usr/bin/docker pull angrysoft/fixturedb:latest
+ExecStartPre=/usr/bin/docker pull angrysoft/homed-web-backend:latest
 ExecStart=/usr/bin/docker run --rm --name %n \
-    -v fixturedb-data:/data \
-    -p 3000:3000 \
-    angrysoft/fixturedb:latest
+    -v homed-web:/data \
+    -p 8080:8080 \
+    angrysoft/homed-web-backend:latest
 
 [Install]
 WantedBy=default.target
