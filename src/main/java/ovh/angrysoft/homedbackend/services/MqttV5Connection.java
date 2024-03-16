@@ -157,6 +157,7 @@ public class MqttV5Connection extends Thread implements MqttCallback {
         return topics;
     }
 
+    @Override
     public void run() {
 
         MemoryPersistence persistence = new MemoryPersistence();
@@ -275,9 +276,7 @@ public class MqttV5Connection extends Thread implements MqttCallback {
     }
 
     private boolean isConnected() {
-        if (client != null && client.isConnected())
-            return true;
-        return false;
+        return client != null && client.isConnected();
     }
 
     public SseEmitter getSseEmitter() {

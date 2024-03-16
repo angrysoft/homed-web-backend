@@ -10,7 +10,7 @@ ExecStartPre=-/usr/bin/docker exec %n stop
 ExecStartPre=-/usr/bin/docker rm %n
 ExecStartPre=/usr/bin/docker pull angrysoft/homed-web-backend:latest
 ExecStart=/usr/bin/docker run --rm --name %n \
-    -v homed-web:/data \
+    --env-file=/etc/homedaemon/web.env
     -p 8080:8080 \
     angrysoft/homed-web-backend:latest
 

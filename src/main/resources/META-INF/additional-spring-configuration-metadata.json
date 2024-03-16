@@ -13,5 +13,25 @@
     "name": "mqtt.password",
     "type": "java.lang.String",
     "description": "mqtt user password"
+  },
+  {
+    "name": "auth.users",
+    "type": "java.lang.String",
+    "description": "A description for 'auth.users'"
+  },
+  {
+    "name": "frontend.login",
+    "type": "java.lang.String",
+    "description": "A description for 'frontend.login'"
+  },
+  {
+    "name": "frontend.userNotFound",
+    "type": "java.lang.String",
+    "description": "A description for 'frontend.userNotFound'"
+  },
+  {
+    "name": "frontend.url",
+    "type": "java.lang.String",
+    "description": "A description for 'frontend.url'"
   }
 ]}
