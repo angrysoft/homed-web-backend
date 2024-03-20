@@ -11,7 +11,7 @@ RUN java -Djarmode=layertools -jar target/homed-web-backend-0.1.0.jar extract
 
 FROM base AS runner
 WORKDIR /app
-# RUN adduser --system --group www-data --uid 33
+RUN adduser --system --group homed-web --uid 106 --gid 112
 COPY --from=builder --chown=homed-web:homed-web /app/dependencies/ ./
 COPY --from=builder --chown=homed-web:homed-web /app/spring-boot-loader/ ./
 COPY --from=builder --chown=homed-web:homed-web /app/snapshot-dependencies/ ./
