@@ -1,11 +1,11 @@
 package ovh.angrysoft.homedbackend.configurations;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,11 +40,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                .exceptionHandling(exceptionHandling-> exceptionHandling.authenticationEntryPoint(new Http403ForbiddenEntryPoint()))
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(new Http403ForbiddenEntryPoint()))
                 .oauth2Login(oath2 -> {
                     // oath2.loginPage("/api/v1/login").permitAll();
                     oath2.successHandler(oAuth2LoginSuccessHandler);
                 })
+                .rememberMe(Customizer.withDefaults())
                 .build();
     }
 
