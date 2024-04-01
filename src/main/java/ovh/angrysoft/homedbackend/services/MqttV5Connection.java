@@ -255,6 +255,8 @@ public class MqttV5Connection extends Thread implements MqttCallback {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            System.err.println("sseEmiter is null ...");
         }
     }
 
