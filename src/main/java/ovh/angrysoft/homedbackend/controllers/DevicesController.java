@@ -1,6 +1,8 @@
 package ovh.angrysoft.homedbackend.controllers;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.paho.mqttv5.common.MqttException;
 import org.springframework.http.MediaType;
@@ -23,6 +25,8 @@ public class DevicesController {
     private final MqttV5Connection mqttConn;
     private SseEmitter sseEmitter;
 
+    Logger logger = Logger.getLogger(getClass().getName());
+
     DevicesController(MqttV5Connection mqttV5Connection, MqttProperties props) {
         this.mqttConn = mqttV5Connection;
         this.mqttConn.setUri(props.uri());
@@ -37,24 +41,24 @@ public class DevicesController {
         try {
             sseEmitter.send("Registered");
         } catch (IOException e) {
-            System.err.println("ERROR: from getdevices");
+            logger.log(Level.WARNING, "ERROR: from getDevices {0}", e.getLocalizedMessage());
             e.printStackTrace();
         }
 
-        System.out.println(String.format("%s - %s", mqttConn.getTopics(), mqttConn.getSseEmitter()));
+        logger.info(String.format("%s - %s", mqttConn.getTopics(), mqttConn.getSseEmitter()));
         return new Device("Halina", "Roboroc 300");
     }
 
     @CrossOrigin
     @GetMapping(path = "/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter events() {
-        System.out.println("init events");
+        logger.info("init events");
         SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
         this.sseEmitter = emitter;
         try {
             sseEmitter.send("start emitter");
         } catch (IOException e) {
-            System.err.println("ERROR: from emiter");
+            logger.warning("ERROR: from emiter " + e.getLocalizedMessage());
 
             // e.printStackTrace();
         }
@@ -66,7 +70,7 @@ public class DevicesController {
 
     @GetMapping("/refresh")
     public String refreshDevicesList() {
-        System.out.println("refreshing");
+        logger.info("refreshing");
         String topic = String.format("homed/%s/set", "e935ce0b-5c5f-47e1-9c7e-7b52afbfa96a");
         try {
             mqttConn.publishMessage(
@@ -74,8 +78,8 @@ public class DevicesController {
                             .getBytes(),
                     0, false, topic);
         } catch (MqttException e) {
-            System.err.println("ERROR: from refresh");
-            e.printStackTrace();
+           logger.warning("ERROR: from refresh " + e.getLocalizedMessage());
+            // e.printStackTrace();
         }
         return "ok";
     }
@@ -86,7 +90,7 @@ public class DevicesController {
         try {
             mqttConn.publishMessage(action.getBytes(), 0, false, topic);
         } catch (MqttException e) {
-            System.err.println("ERROR: from send action");
+            logger.warning("ERROR: from send action " +  e.getLocalizedMessage());
 
             e.printStackTrace();
         }

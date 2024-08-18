@@ -1,6 +1,5 @@
 package ovh.angrysoft.homedbackend.configurations;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -40,10 +39,15 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                .exceptionHandling(exceptionHandling-> exceptionHandling.authenticationEntryPoint(new Http403ForbiddenEntryPoint()))
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(new Http403ForbiddenEntryPoint()))
                 .oauth2Login(oath2 -> {
-                    // oath2.loginPage("/api/v1/login").permitAll();
                     oath2.successHandler(oAuth2LoginSuccessHandler);
+                })
+                .rememberMe(rem -> {
+                    rem.alwaysRemember(true);
+                    rem.authenticationSuccessHandler(oAuth2LoginSuccessHandler);
+                    rem.tokenValiditySeconds(1296000);
                 })
                 .build();
     }
