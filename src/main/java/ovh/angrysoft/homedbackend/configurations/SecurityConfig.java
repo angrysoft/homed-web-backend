@@ -44,11 +44,11 @@ public class SecurityConfig {
                 .oauth2Login(oath2 -> {
                     oath2.successHandler(oAuth2LoginSuccessHandler);
                 })
-                .rememberMe(rem -> {
-                    rem.alwaysRemember(true);
-                    rem.authenticationSuccessHandler(oAuth2LoginSuccessHandler);
-                    rem.tokenValiditySeconds(1296000);
-                })
+                // .rememberMe(rem -> {
+                //     rem.alwaysRemember(true);
+                //     rem.authenticationSuccessHandler(oAuth2LoginSuccessHandler);
+                //     rem.tokenValiditySeconds(1296000);
+                // })
                 .build();
     }
 
