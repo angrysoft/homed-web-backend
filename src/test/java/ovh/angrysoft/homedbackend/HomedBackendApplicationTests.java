@@ -3,7 +3,7 @@ package ovh.angrysoft.homedbackend;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(classes = HomedBackendApplicationTests.class)
 class HomedBackendApplicationTests {
 
 	@Test

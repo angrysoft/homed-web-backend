@@ -137,7 +137,9 @@ public class MqttV5Connection extends Thread implements MqttCallback {
             try {
                 this.client.subscribe(topic, this.qos);
             } catch (MqttException e) {
-                e.printStackTrace();
+                LOGGER.warning(e.getMessage());
+                if (e.getCause() != null)
+                    LOGGER.warning(e.getCause().getMessage());
             }
         }
     }
@@ -148,7 +150,9 @@ public class MqttV5Connection extends Thread implements MqttCallback {
             try {
                 this.client.unsubscribe(topic);
             } catch (MqttException e) {
-                e.printStackTrace();
+                LOGGER.warning(e.getMessage());
+                if (e.getCause() != null)
+                    LOGGER.warning(e.getCause().getMessage());
             }
         }
     }
@@ -168,9 +172,11 @@ public class MqttV5Connection extends Thread implements MqttCallback {
             connectToken.waitForCompletion();
             subscribe();
         } catch (MqttException e) {
-            e.printStackTrace();
+            LOGGER.warning(e.getMessage());
+            if (e.getCause() != null)
+                LOGGER.warning(e.getCause().getMessage());
         }
-        System.out.println(String.format("Mqtt Connection %s - %s", Thread.currentThread(), mainThread));
+        System.out.printf("Mqtt Connection %s - %s%n", Thread.currentThread(), mainThread);
     }
 
     private void subscribe() {
@@ -197,7 +203,7 @@ public class MqttV5Connection extends Thread implements MqttCallback {
         deliveryToken.waitForCompletion(this.timeout);
     }
 
-    public void addSseEmiter(SseEmitter emitter) {
+    public void addSseEmitter(SseEmitter emitter) {
         this.sseEmitter = emitter;
     }
 
@@ -248,15 +254,17 @@ public class MqttV5Connection extends Thread implements MqttCallback {
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         String messageContent = new String(message.getPayload());
-        System.err.println(String.format("MSG: %s", messageContent));
+        System.err.printf("MSG: %s%n", messageContent);
         if (sseEmitter != null) {
             try {
                 sseEmitter.send(messageContent);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.warning(e.getMessage());
+                if (e.getCause() != null)
+                    LOGGER.warning(e.getCause().getMessage());
             }
         } else {
-            System.err.println("sseEmiter is null ...");
+            System.err.println("sseEmitter is null ...");
         }
     }
 

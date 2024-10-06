@@ -41,8 +41,9 @@ public class DevicesController {
         try {
             sseEmitter.send("Registered");
         } catch (IOException e) {
-            logger.log(Level.WARNING, "ERROR: from getDevices {0}", e.getLocalizedMessage());
-            e.printStackTrace();
+            logger.warning("ERROR: from getDevices " + e.getLocalizedMessage());
+            if (e.getCause() != null)
+                logger.warning(e.getCause().getMessage());
         }
 
         logger.info(String.format("%s - %s", mqttConn.getTopics(), mqttConn.getSseEmitter()));
@@ -59,12 +60,10 @@ public class DevicesController {
             sseEmitter.send("start emitter");
         } catch (IOException e) {
             logger.warning("ERROR: from emiter " + e.getLocalizedMessage());
-
-            // e.printStackTrace();
         }
         String topic = String.format("homed/%s/get", "e935ce0b-5c5f-47e1-9c7e-7b52afbfa96a");
         mqttConn.addTopic(topic);
-        mqttConn.addSseEmiter(sseEmitter);
+        mqttConn.addSseEmitter(sseEmitter);
         return emitter;
     }
 
@@ -79,7 +78,6 @@ public class DevicesController {
                     0, false, topic);
         } catch (MqttException e) {
            logger.warning("ERROR: from refresh " + e.getLocalizedMessage());
-            // e.printStackTrace();
         }
         return "ok";
     }
@@ -91,15 +89,10 @@ public class DevicesController {
             mqttConn.publishMessage(action.getBytes(), 0, false, topic);
         } catch (MqttException e) {
             logger.warning("ERROR: from send action " +  e.getLocalizedMessage());
-
-            e.printStackTrace();
+            if (e.getCause() != null)
+                logger.warning(e.getCause().getMessage());
         }
         return "ok";
-    }
-
-    @GetMapping("/{id}")
-    public Device getMethodName(@PathVariable String id) {
-        return new Device("Halina", id);
     }
 
 }
